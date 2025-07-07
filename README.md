@@ -127,7 +127,7 @@ GET /health
 POST /auth/register
 {
     "email": "user@example.com",
-    "password": "securepassword",
+    "password": "your_secure_password",
     "full_name": "John Doe"
 }
 ```
@@ -137,7 +137,7 @@ POST /auth/register
 POST /auth/login
 {
     "email": "user@example.com",
-    "password": "securepassword"
+    "password": "your_secure_password"
 }
 ```
 
