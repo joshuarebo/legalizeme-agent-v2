@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: legalizeme-agent
+    env: python
+    region: oregon  # or choose another region closer to Kenya
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    plan: pro # Upgraded plan for more resources
+    healthCheckPath: /health
+    numInstances: 2  # Run multiple instances for high availability
+    scaling:
+      minInstances: 2
+      maxInstances: 5
+      targetMemoryPercent: 80
+      targetCPUPercent: 75
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: AWS_ACCESS_KEY_ID
+        sync: false  # This will be set manually in Render dashboard
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false  # This will be set manually in Render dashboard
+      - key: AWS_DEFAULT_REGION
+        value: us-east-1
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false  # This will be set manually in Render dashboard
+      - key: SECRET_KEY
+        sync: false  # This will be set manually in Render dashboard
+      - key: ALGORITHM
+        value: HS256
+      - key: HUGGING_FACE_TOKEN
+        sync: false  # This will be set manually in Render dashboard
+      - key: SENTRY_DSN
+        sync: false  # For error tracking
+      - key: REDIS_URL
+        sync: false  # For caching
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        value: "https://www.legalizeme.site,https://legalizeme.site"
+    disk:
+      name: tmp
+      mountPath: /tmp
+      sizeGB: 10
+    autoDeploy: true 
